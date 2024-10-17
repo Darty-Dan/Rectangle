@@ -67,14 +67,18 @@ def calculate_midpoints(x, y, Hrectangle, Wrectangle, pointX, pointY):
     #Print midpoints
     print("The midpoints are F(%.2f, %.2f), I(%.2f, %.2f), H(%.2f, %.2f), G(%.2f, %.2f), M(%.2f, %.2f)" %(Fx, FyHyMy, IxGxMx, Iy, Hx, FyHyMy, IxGxMx, Gy, IxGxMx, FyHyMy))
 
-#Input
-coordinates = input("Enter point in \"(pointX,pointY)\" form: ")
-bracket1 = coordinates.find("(")
-bracket2 = coordinates.find(")")
-comma = coordinates.find(",")
-#Differentiate all the points needed
-if coordinates[0] != "(":
-    print("coordinates must start with (")
-pointX = coordinates[bracket1 + 1: comma]
-pointY = coordinates[comma + 1:bracket2]
+def smth():
+    #Input
+    coordinates = input("Enter point in \"(pointX,pointY)\" form: ")
+    bracket1 = coordinates.find("(")
+    bracket2 = coordinates.find(")")
+    comma = coordinates.find(",")
+    #Differentiate all the points needed
+    if coordinates[0] != "(":
+        print("coordinates must start with (")
+        smth()
+    pointX = coordinates[bracket1 + 1: comma]
+    pointY = coordinates[comma + 1:bracket2]
+    return pointX, pointY
+pointX, pointY = smth()
 rectangle(3, 5, 17, 21, pointX, pointY)

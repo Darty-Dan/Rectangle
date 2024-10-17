@@ -1,7 +1,7 @@
 #Rectangle function
 def rectangle(x, y, height, width, pointX, pointY):
 
-    
+    #Check to make sure everything is a digit
     if not (str(x).isdigit() and str(y).isdigit() and str(height).isdigit() and str(width).isdigit() and str(pointX).isdigit() and str(pointY).isdigit()):
         print("Only use integer values")
         coordinates = input("Enter point in \"(pointX,pointY)\" form: ")
@@ -74,7 +74,7 @@ bracket2 = coordinates.find(")")
 comma = coordinates.find(",")
 #Differentiate all the points needed
 if coordinates[0] != "(":
-    print
+    print("coordinates must start with (")
 pointX = coordinates[bracket1 + 1: comma]
 pointY = coordinates[comma + 1:bracket2]
 rectangle(3, 5, 17, 21, pointX, pointY)

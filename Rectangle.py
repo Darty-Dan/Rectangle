@@ -6,6 +6,7 @@ def rectangle(x, y, height, width, pointX, pointY):
         print("Only use integer values")
         coordinates = input("Enter point in \"(pointX,pointY)\" form: ")
         rectangle(x, y, height, width, pointX, pointY)
+
     #Convert to integers for math
     x = int(x)
     y = int(y)
@@ -67,7 +68,7 @@ def calculate_midpoints(x, y, Hrectangle, Wrectangle, pointX, pointY):
     #Print midpoints
     print("The midpoints are F(%.2f, %.2f), I(%.2f, %.2f), H(%.2f, %.2f), G(%.2f, %.2f), M(%.2f, %.2f)" %(Fx, FyHyMy, IxGxMx, Iy, Hx, FyHyMy, IxGxMx, Gy, IxGxMx, FyHyMy))
 
-def smth():
+def Pinput():
     #Input
     coordinates = input("Enter point in \"(pointX,pointY)\" form: ")
     bracket1 = coordinates.find("(")
@@ -76,9 +77,29 @@ def smth():
     #Differentiate all the points needed
     if coordinates[0] != "(":
         print("coordinates must start with (")
-        smth()
+        return Pinput()
+
+    if coordinates[-1] != ")":
+        print("coordinates must end with )")
+        return Pinput()
+
+    if coordinates.count("(") > 1:
+        print("There must only be one (")
+
+    if coordinates.count(")") > 1:
+        print("there must only be one )")
+
+    if comma == -1 or coordinates[bracket1 + 1] == "," or coordinates[bracket2 - 2] == ",":
+        print("Comma must be between the 2 integers and there must be only 1 comma")
+        return Pinput()
+
+    if coordinates[comma + 1:bracket2] == "":
+        print("Must have a second integer")
+        return Pinput()
+
     pointX = coordinates[bracket1 + 1: comma]
     pointY = coordinates[comma + 1:bracket2]
     return pointX, pointY
-pointX, pointY = smth()
+
+pointX, pointY = Pinput()
 rectangle(3, 5, 17, 21, pointX, pointY)

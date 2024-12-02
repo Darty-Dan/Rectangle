@@ -1,154 +1,477 @@
-#Rectangle function
-def rectangle(x, y, width, height, pointX, pointY):
+#Name: Daniel Lin
+#Course Code: ICS3U1
+#Code Description: Treasure hunt game
+#Due Date: December 6th 2024
 
-    #Convert to integers for math
-    x = int(x)
-    y = int(y)
-    height = int(height)
-    width = int(width)
-    pointX = int(pointX)
-    pointY = int(pointY)
+from pygame import *
+import random
 
-    #Define for rectangle vertices
-    Hrectangle = y + height #Height of rectangle
-    Wrectangle = x + width #Width of rectangle
+init()
 
-    #Print the vertices
-    print("Vertex A is (%i, %i), Vertex B is (%i, %i), Vertex C is (%i, %i), Vertex D is (%i, %i)>" %(x, y, x, Hrectangle, Wrectangle, Hrectangle, Wrectangle, y))
+info = display.Info()
 
-    #Call the midpoints calculations
-    calculate_midpoints(x, y, Hrectangle, Wrectangle, pointX, pointY)
+#Screen size
+width = 800
+height = 500
+SIZE = (width, height)
+screen = display.set_mode(SIZE)
 
-def calculate_midpoints(x, y, Hrectangle, Wrectangle, pointX, pointY):
-    #Midpoints calculations (Fx = the x cord of point F, FyHyMy = the y cord of point F, H and M)
-    Fx = x
-    FyHyMy = (Hrectangle + y)/2
-    Hx = Wrectangle
-    IxGxMx = (Wrectangle + x)/2
-    Gy = y
-    Iy = Hrectangle
+#Initializing whether keys are true or false
+KEY_RIGHT = False
+KEY_LEFT = False
+KEY_UP = False
+KEY_DOWN = False
 
-    #Print midpoints
-    print("The midpoints are F(%.2f, %.2f), I(%.2f, %.2f), H(%.2f, %.2f), G(%.2f, %.2f), M(%.2f, %.2f)." %(Fx, FyHyMy, IxGxMx, Iy, Hx, FyHyMy, IxGxMx, Gy, IxGxMx, FyHyMy))
+#Character sprites
+char_forward = image.load("C:\\Users\\Daniel\\PycharmProjects\\pythonProject\\sprites\\image (3) (1) (1) (1)\\image (1).png")
+char_left = image.load("C:\\Users\\Daniel\\PycharmProjects\\pythonProject\\sprites\\image (3) (1) (1) (1)\\image (3) (1) (1).png")
+char_right = image.load("C:\\Users\\Daniel\\PycharmProjects\\pythonProject\\sprites\\image (3) (1) (1) (1)\\image (3) (1) (1) (1).png")
+char_back = image.load("C:\\Users\\Daniel\\PycharmProjects\\pythonProject\\sprites\\image (3) (1) (1) (1)\\image (1) (1).png")
 
-    #Determine if the point is on or within the rectangle or on the edge or on a vertex
-    if pointX >= x and pointX <= Wrectangle and pointY >= y and pointY <= Hrectangle:
-        print("The point (%i, %i) is on or within the rectangle." %(pointX, pointY))
+#Doubling character size
+char_forward = transform.scale(char_forward, (char_forward.get_width() * 2, char_forward.get_height() * 2))
+char_left = transform.scale(char_left, (char_left.get_width() * 2, char_left.get_height() * 2))
+char_right = transform.scale(char_right, (char_right.get_width() * 2, char_right.get_height() * 2))
+char_back = transform.scale(char_back, (char_back.get_width() * 2, char_back.get_height() * 2))
 
-        #Check which quadrant
-        if pointX > IxGxMx and pointX < Hx and pointY > FyHyMy and pointY < Iy: #Quadrant 1
-            print("and the point (%i, %i) is within quadrant 1." %(pointX, pointY))
-        elif pointX > Fx and pointX < IxGxMx and pointY > FyHyMy and pointY < Iy: #Quadrant 2
-            print("and the point (%i, %i) is within quadrant 2." %(pointX, pointY))
-        elif pointX > Fx and pointX < IxGxMx and pointY > Gy and pointY < FyHyMy: #Quadrant 3
-            print("and the point (%i, %i) is within quadrant 3." %(pointX, pointY))
-        elif pointX > IxGxMx and pointX < Hx and pointY > Gy and pointY < FyHyMy: #Quadrant 4
-            print("and the point (%i, %i) is within quadrant 4." %(pointX, pointY))
+#Backgrounds
+outdoor = image.load("C:\\Users\\Daniel\\PycharmProjects\\pythonProject\\sprites\\image (3) (1) (1) (1)\\Outdoor.png")
+hallway = image.load("C:\\Users\\Daniel\\PycharmProjects\\pythonProject\\sprites\\image (3) (1) (1) (1)\\Hallway.png")
+living_room = image.load("C:\\Users\\Daniel\\PycharmProjects\\pythonProject\\sprites\\image (3) (1) (1) (1)\\Living room.png")
+kitchen = image.load("C:\\Users\\Daniel\\PycharmProjects\\pythonProject\\sprites\\image (3) (1) (1) (1)\\Kitchen.png")
+dining_room = image.load("C:\\Users\\Daniel\\PycharmProjects\\pythonProject\\sprites\\image (3) (1) (1) (1)\\Dining room.png")
+bathroom = image.load("C:\\Users\\Daniel\\PycharmProjects\\pythonProject\\sprites\\image (3) (1) (1) (1)\\Bathroom.png")
+Room1 = image.load("C:\\Users\\Daniel\\PycharmProjects\\pythonProject\\sprites\\image (3) (1) (1) (1)\\Room1.png")
+Room2 = image.load("C:\\Users\\Daniel\\PycharmProjects\\pythonProject\\sprites\\image (3) (1) (1) (1)\\Room2.png")
 
-        #Between the quadrants
-        elif pointX == IxGxMx and pointY > FyHyMy and pointY < Iy: #Quadrant 1, 2
-            print("and the point (%i, %i) is between quadrant 1 and 2(I, M)." %(pointX, pointY))
-        elif pointX > Fx and pointX < IxGxMx and pointY == FyHyMy: #Quadrant 2, 3
-            print("and the point (%i, %i) is between quadrant 2 and 3(F, M)." %(pointX, pointY))
-        elif pointX == IxGxMx and pointY > Gy and pointY < FyHyMy: #Quadrant 3, 4
-            print("and the point (%i, %i) is between quadrant 3 and 4(M, G)." %(pointX, pointY))
-        elif pointX > IxGxMx and pointX < Hx and pointY == FyHyMy: #Quadrant 4, 1
-            print("and the point (%i, %i) is between quadrant 4 and 1(M, H)." %(pointX, pointY))
+#Character Sprites
+player_sprites = [char_forward, char_left, char_right, char_back]
 
-        #Vertex check
-        elif pointX == x and pointY == y: #Vertex A
-            print("and the point (%i, %i) is on vertex A." %(pointX, pointY))
-        elif pointX == x and pointY == Hrectangle: #Vertex B
-            print("and the point (%i, %i) is on vertex B." %(pointX, pointY))
-        elif pointX == Wrectangle and pointY == Hrectangle: #Vertex C
-            print("and the point (%i, %i) is on vertex C." %(pointX, pointY))
-        elif pointX == Wrectangle and pointY == y: #Vertex D
-            print("and the point (%i, %i) is on vertex D." %(pointX, pointY))
+#Initializing starting sprite
+player = player_sprites[0]
 
-        #Mid-point check
-        elif pointX == IxGxMx and pointY == FyHyMy: #Point M
-            print("and the point (%i, %i) is on point M and touching all quadrants." %(pointX, pointY))
-        elif pointX == Fx and pointY == FyHyMy: #Point F
-            print("and the point (%i, %i) is on point F." %(pointX, pointY))
-        elif pointX == IxGxMx and pointY == Iy: #Point I
-            print("and the point (%i, %i) is on point I." %(pointX, pointY))
-        elif pointX == Hx and pointY == FyHyMy: #Point H
-            print("and the point (%i, %i) is on point I." %(pointX, pointY))
-        elif pointX == IxGxMx and pointY == Gy: #Point G
-            print("and the point (%i, %i) is on point G" %(pointX, pointY))
+#Initializing starting location
+player_x = 360
+player_y = 400
 
-        #Line check
-        elif pointX == x and pointY <= Hrectangle and pointY >= y: #AB
-            print("and the point (%i, %i) is on the line AB." %(pointX, pointY))
-        elif pointX >= x and pointX <= Wrectangle and pointY == Hrectangle: #BC
-            print("and the point (%i, %i) is on the line BC.")
-        elif pointX == Wrectangle and pointY <= Hrectangle and pointY >= y: #CD
-            print("and the point (%i, %i) is on the line CD." %(pointX, pointY))
-        elif pointX >= x and pointX <= Wrectangle and pointY == y: #DA
-            print("and the point (%i, %i) is on the line DA." %(pointX, pointY))
-    else: #Not within rectangle
-        print("The point (%i, %i) is not on or within the rectangle." %(pointX, pointY))
+#Player speed
+player_speed = 3
 
-def point_input(): #User inputted point
+#Background list
+backgrounds = [outdoor, hallway, living_room, kitchen, dining_room, bathroom, Room1, Room2]
 
-    #Input
-    coordinates = input("Enter point in \"(pointX,pointY)\" form(NO SPACES): ")
-    #Finding brackets and comma
-    bracket1 = coordinates.find("(")
-    bracket2 = coordinates.find(")")
-    comma = coordinates.find(",")
+backgrounds = backgrounds[0]
 
-    #Make sure there is an input
-    if coordinates == "":
-        print("There must be coordinates inputted")
-        return point_input()
+#Font
+my_font = font.Font(None, 20)
+WHITE = (255, 255, 255)
 
-    #Make sure there aren't spaces
-    elif coordinates.find(" ") != -1:
-        print("There cannot be a space in the coordinates")
-        return point_input()
+#Interact text
+start_text = my_font.render("There's been some suspicious activity around the Howard house, best to investigate", True, WHITE)
+my_text = my_font.render("Press E to interact", True, WHITE)
 
-    #Check for position of ( and )
-    if coordinates[0] != "(" or coordinates[-1] != ")":
-        print("Coordinates must start with ( and end with )")
-        return point_input()
+#Door hit boxes
+house_door = Rect(320, 100, 120, 20)
+house_door_H = Rect(320, 470, 120, 20)
+hallway_L = Rect(230, 290, 20, 100)
+living_room_door_H = Rect(740, 340, 10, 80)
+living_room_door_K = Rect(100, 0, 100, 20)
+kitchen_L = Rect(100, 422, 120, 20)
+kitchen_D = Rect(140, 20, 100, 20)
+dining_room_K = Rect(70, 480, 95, 20)
+hallway_R2 = Rect(230, 200, 20, 80)
+hallway_R1 = Rect(230, 90, 20, 80)
+Room2_H = Rect(775, 190, 25, 110)
+Room1_H = Rect(775, 190, 25, 110)
+hallway_B = Rect(310, 0, 80, 25)
+bathroom_H = Rect(360, 475, 100, 20)
 
-    #Make sure there is only 1 ( and )
-    elif coordinates.count("(") > 1 or coordinates.count(")") > 1:
-        print("There must only be one ( and one )")
-        return point_input()
+#Object hit boxes
+house_rect = Rect(145, 0, 495, 95)
+tree1 = Rect(110, 175, 80, 80)
+tree2 = Rect(568, 155, 60, 78)
+drawer_H = Rect(520, 200, 50, 68)
+bookshelf_L = Rect(750, 50, 80, 150)
+couch = Rect(320, 255, 160, 25)
+chip_table = Rect(230, 320, 30, 40)
+TV = Rect(350, 460, 115, 20)
 
-    #Make sure there are numbers before the comma and after
-    elif coordinates[bracket1 + 1:comma] == "" or coordinates[comma + 1:bracket2] == "":
-        print("Must have a first and second integer")
-        return point_input()
+# Player hit box-
+player_collision = Rect(player_x, player_y, 64, 64)
 
-    #Make sure there is a comma the comma isn't directly after or before the bracket
-    elif comma == -1 or coordinates[bracket1 + 1] == "," or coordinates[bracket2 - 1] == ",":
-        print("Comma must be between the 2 integers and there must be only 1 comma")
-        return point_input()
 
-    #Make sure there is only 1 comma
-    elif coordinates.count(",") > 1:
-        print("There must only be one comma")
-        return point_input()
+def drawScreen():
+    screen.blit(backgrounds, (0, 0))
 
-    #Make sure there are no negatives
-    elif coordinates.find("-") != -1:
-        print("There must not be any negative numbers")
-        return point_input()
+    #Outdoor
+    if backgrounds == outdoor:
+        screen.blit(start_text, (130, 470))
+        screen.blit(player, (player_x, player_y))
+        if player_collision.colliderect(house_door):
+            screen.blit(my_text, (340, 100))
 
-    #Defining pointX and pointY
-    pointX = coordinates[bracket1 + 1:comma]
-    pointY = coordinates[comma + 1:bracket2]
+    #Hallway
+    if backgrounds == hallway:
+        screen.blit(player, (player_x, player_y))
+        if player_collision.colliderect(hallway_L):
+            screen.blit(my_text, (185, 300))
+        elif player_collision.colliderect(house_door_H):
+            screen.blit(my_text, (336, 480))
+        elif player_collision.colliderect(hallway_R2):
+            screen.blit(my_text, (190, 155))
+        elif player_collision.colliderect(hallway_R1):
+            screen.blit(my_text, (185, 30))
+        elif player_collision.colliderect(hallway_B):
+            screen.blit(my_text, (280, 20))
 
-    #Check for integer
-    if not (pointX.isdigit() and pointY.isdigit()):
-        print("Only use integer values")
-        return point_input()
+    #Living Room
+    if backgrounds == living_room:
+        screen.blit(player, (player_x, player_y))
+        if player_collision.colliderect(living_room_door_H):
+            screen.blit(my_text, (660, 315))
+        elif player_collision.colliderect(living_room_door_K):
+            screen.blit(my_text, (86, 30))
 
-    return pointX, pointY
+    #Kitchen
+    if backgrounds == kitchen:
+        screen.blit(player, (player_x, player_y))
+        if player_collision.colliderect(kitchen_L):
+            screen.blit(my_text, (100, 470))
+        if player_collision.colliderect(kitchen_D):
+            screen.blit(my_text, (124, 20))
 
-#Assignment
-pointX, pointY = point_input()
-rectangle(3, 5, 17, 21, pointX, pointY)
+    #Dining Room
+    if backgrounds == dining_room:
+        screen.blit(player, (player_x, player_y))
+        if player_collision.colliderect(dining_room_K):
+            screen.blit(my_text, (75, 460))
+
+    #Room2
+    if backgrounds == Room2:
+        screen.blit(player, (player_x, player_y))
+        if player_collision.colliderect(Room2_H):
+            screen.blit(my_text, (680, 150))
+
+    #Room1
+    if backgrounds == Room1:
+        screen.blit(player, (player_x, player_y))
+        if player_collision.colliderect(Room1_H):
+            screen.blit(my_text, (680, 150))
+
+    #Bathroom
+    if backgrounds == bathroom:
+        screen.blit(player, (player_x, player_y))
+        if player_collision.colliderect(bathroom_H):
+            screen.blit(my_text, (350, 460))
+
+    display.flip()
+
+#Initializing clock
+myClock = time.Clock()
+
+running = True
+
+while running:
+    for evnt in event.get():
+        if evnt.type == QUIT:
+            running = False
+
+        if evnt.type == KEYDOWN:
+            if evnt.key == K_LEFT:
+                KEY_LEFT = True
+            if evnt.key == K_RIGHT:
+                KEY_RIGHT = True
+            if evnt.key == K_UP:
+                KEY_UP = True
+            if evnt.key == K_DOWN:
+                KEY_DOWN = True
+            if evnt.key == K_e:
+                #Outdoor
+                if backgrounds == outdoor and player_collision.colliderect(house_door):
+                    player_x = 360
+                    player_y = 430
+                    player = player_sprites[3]
+                    backgrounds = hallway
+                #Hallway
+                elif backgrounds == hallway and player_collision.colliderect(house_door_H):
+                    player_x = 360
+                    player_y = 120
+                    player = player_sprites[0]
+                    backgrounds = outdoor
+                elif backgrounds == hallway and player_collision.colliderect(hallway_L):
+                    player_x = 740
+                    player_y = 340
+                    player = player_sprites[1]
+                    backgrounds = living_room
+                elif backgrounds == hallway and player_collision.colliderect(hallway_R2):
+                    player_x = 735
+                    player_y = 210
+                    player = player_sprites[1]
+                    backgrounds = Room2
+                elif backgrounds == hallway and player_collision.colliderect(hallway_R1):
+                    player_x = 735
+                    player_y = 210
+                    player = player_sprites[1]
+                    backgrounds = Room1
+                elif backgrounds == hallway and player_collision.colliderect(hallway_B):
+                    player_x = 380
+                    player_y = 426
+                    player = player_sprites[3]
+                    backgrounds = bathroom
+                #Living Room
+                elif backgrounds == living_room and player_collision.colliderect(living_room_door_H):
+                    player_x = 235
+                    player_y = 340
+                    player = player_sprites[2]
+                    backgrounds = hallway
+                elif backgrounds == living_room and player_collision.colliderect(living_room_door_K):
+                    player_x = 125
+                    player_y = 430
+                    player = player_sprites[3]
+                    backgrounds = kitchen
+                #Kitchen
+                elif backgrounds == kitchen and player_collision.colliderect(kitchen_L):
+                    player_x = 110
+                    player_y = 10
+                    player = player_sprites[0]
+                    backgrounds = living_room
+                elif backgrounds == kitchen and player_collision.colliderect(kitchen_D):
+                    player_x = 110
+                    player_y = 432
+                    player = player_sprites[3]
+                    backgrounds = dining_room
+                #Dining Room
+                elif backgrounds == dining_room and player_collision.colliderect(dining_room_K):
+                    player_x = 140
+                    player_y = 10
+                    player = player_sprites[0]
+                    backgrounds = kitchen
+                #Room2
+                elif backgrounds == Room2 and player_collision.colliderect(Room2_H):
+                    player_x = 232
+                    player_y = 190
+                    player = player_sprites[2]
+                    backgrounds = hallway
+                #Room1
+                elif backgrounds == Room1 and player_collision.colliderect(Room1_H):
+                    player_x = 232
+                    player_y = 75
+                    player = player_sprites[2]
+                    backgrounds = hallway
+                #Bathroom
+                elif backgrounds == bathroom and player_collision.colliderect(bathroom_H):
+                    player_x = 305
+                    player_y = 15
+                    player = player_sprites[0]
+                    backgrounds = hallway
+
+
+        #Initializing key state
+        if evnt.type == KEYUP:
+            if evnt.key == K_LEFT:
+                KEY_LEFT = False
+            if evnt.key == K_RIGHT:
+                KEY_RIGHT = False
+            if evnt.key == K_UP:
+                KEY_UP = False
+            if evnt.key == K_DOWN:
+                KEY_DOWN = False
+
+    # Updating player collision
+    player_collision = Rect(player_x, player_y, 64, 64)
+
+    if KEY_LEFT:
+        player = player_sprites[1]
+        predicted_collision = player_collision.move(-player_speed * 1.5, 0)
+
+        #Outdoor
+        if backgrounds == outdoor:
+            if not predicted_collision.colliderect(house_rect) and not predicted_collision.colliderect(tree1) and not predicted_collision.colliderect(tree2) and player_x >= -10:
+                    player = player_sprites[1]
+                    player_x -= player_speed
+
+        #Hallway
+        elif backgrounds == hallway:
+            if not predicted_collision.colliderect(drawer_H) and player_x >= 230:
+                player = player_sprites[1]
+                player_x -= player_speed
+
+        #Living Room
+        elif backgrounds == living_room:
+            if not predicted_collision.colliderect(bookshelf_L) and not predicted_collision.colliderect(couch) and not predicted_collision.colliderect(chip_table) and not predicted_collision.colliderect(TV) and player_x >= -10:
+                player = player_sprites[1]
+                player_x -= player_speed
+
+        #Kitchen
+        elif backgrounds == kitchen and player_x >= -10:
+            player = player_sprites[1]
+            player_x -= player_speed
+
+        #Dining Room
+        elif backgrounds == dining_room and player_x >= -10:
+            player = player_sprites[1]
+            player_x -= player_speed
+
+        #Room2
+        elif backgrounds == Room2 and player_x >= -10:
+            player = player_sprites[1]
+            player_x -= player_speed
+
+        #Room1
+        elif backgrounds == Room1 and player_x >= -10:
+            player = player_sprites[1]
+            player_x -= player_speed
+
+        #Bathroom
+        elif backgrounds == bathroom and player_x >= 173:
+            player = player_sprites[1]
+            player_x -= player_speed
+
+
+    if KEY_RIGHT:
+        player = player_sprites[2]
+        predicted_collision = player_collision.move(player_speed, 0)
+
+        #Outdoor
+        if backgrounds == outdoor:
+            if not predicted_collision.colliderect(house_rect) and not predicted_collision.colliderect(tree1) and not predicted_collision.colliderect(tree2) and player_x <= 745:
+                player = player_sprites[2]
+                player_x += player_speed
+
+        #Hallway
+        elif backgrounds == hallway:
+            if not predicted_collision.colliderect(drawer_H) and player_x <= 500:
+                player = player_sprites[2]
+                player_x += player_speed
+
+        #Living Room
+        elif backgrounds == living_room:
+            if not predicted_collision.colliderect(bookshelf_L) and not predicted_collision.colliderect(couch) and not predicted_collision.colliderect(chip_table) and not predicted_collision.colliderect(TV) and player_x <= 740:
+                player = player_sprites[2]
+                player_x += player_speed
+
+        #Kitchen
+        elif backgrounds == kitchen and player_x <= 740:
+            player = player_sprites[2]
+            player_x += player_speed
+
+        #Dining Room
+        elif backgrounds == dining_room and player_x <= 740:
+            player = player_sprites[2]
+            player_x += player_speed
+
+        #Room2
+        elif backgrounds == Room2 and player_x <= 740:
+            player = player_sprites[2]
+            player_x += player_speed
+
+        #Room1
+        elif backgrounds == Room1 and player_x <= 740:
+            player = player_sprites[2]
+            player_x += player_speed
+
+        #Bathroom
+        elif backgrounds == bathroom and player_x <= 585:
+            player = player_sprites[2]
+            player_x += player_speed
+
+
+    if KEY_UP:
+        player = player_sprites[3]
+        predicted_collision = player_collision.move(0, -player_speed * 1.7)
+
+        #Outdoor
+        if backgrounds == outdoor:
+            if not predicted_collision.colliderect(house_rect) and not predicted_collision.colliderect(tree1) and not predicted_collision.colliderect(tree2) and player_y >= 0:
+                player = player_sprites[3]
+                player_y -= player_speed
+
+        #Hallway
+        elif backgrounds == hallway:
+            if not predicted_collision.colliderect(drawer_H) and player_y >= 5:
+                player = player_sprites[3]
+                player_y -= player_speed
+
+        #Living Room
+        elif backgrounds == living_room:
+            if not predicted_collision.colliderect(bookshelf_L) and not predicted_collision.colliderect(couch) and not predicted_collision.colliderect(chip_table) and not predicted_collision.colliderect(TV) and player_y >= 5:
+                player = player_sprites[3]
+                player_y -= player_speed
+
+        #Kitchen
+        elif backgrounds == kitchen and player_y >= 5:
+            player = player_sprites[3]
+            player_y -= player_speed
+
+        #Dining Room
+        elif backgrounds == dining_room and player_y >= 5:
+            player = player_sprites[3]
+            player_y -= player_speed
+
+        #Room2
+        elif backgrounds == Room2 and player_y >= 5:
+            player = player_sprites[3]
+            player_y -= player_speed
+
+        #Room1
+        elif backgrounds == Room1 and player_y >= 5:
+            player = player_sprites[3]
+            player_y -= player_speed
+
+        #Bathroom
+        elif backgrounds == bathroom and player_y >= 5:
+            player = player_sprites[3]
+            player_y -= player_speed
+
+    if KEY_DOWN:
+        player = player_sprites[0]
+        predicted_collision = player_collision.move(0, player_speed)
+
+        #Outdoor
+        if backgrounds == outdoor:
+            if not predicted_collision.colliderect(house_rect) and not predicted_collision.colliderect(tree1) and not predicted_collision.colliderect(tree2) and player_y <= 430:
+               player = player_sprites[0]
+               player_y += player_speed
+
+        #Hallway
+        elif backgrounds == hallway and player_y <= 426:
+            if not predicted_collision.colliderect(drawer_H) and player_y <= 426:
+                player = player_sprites[0]
+                player_y += player_speed
+
+        #Living Room
+        elif backgrounds == living_room and player_y <= 426:
+            if not predicted_collision.colliderect(bookshelf_L) and not predicted_collision.colliderect(couch) and not predicted_collision.colliderect(chip_table) and not predicted_collision.colliderect(TV) and player_y <= 426:
+                player = player_sprites[0]
+                player_y += player_speed
+
+        #Kitchen
+        elif backgrounds == kitchen and player_y <= 426:
+            player = player_sprites[0]
+            player_y += player_speed
+
+        #Dining Room
+        elif backgrounds == dining_room and player_y <= 426:
+            player = player_sprites[0]
+            player_y += player_speed
+
+        #Room2
+        elif backgrounds == Room2 and player_y <= 426:
+            player = player_sprites[0]
+            player_y += player_speed
+
+        #Room1
+        elif backgrounds == Room1 and player_y <= 426:
+            player = player_sprites[0]
+            player_y += player_speed
+
+        #Bathroom
+        elif backgrounds == bathroom and player_y <= 426:
+            player = player_sprites[0]
+            player_y += player_speed
+
+    drawScreen()
+    display.flip()
+    myClock.tick(60)
+
+quit()
